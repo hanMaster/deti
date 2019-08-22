@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Client;
 use App\Models\Abonement;
 use App\Models\Abonement_log;
+use App\Models\Check;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
@@ -87,12 +88,20 @@ class ClientController extends Controller
     {
       $abonements = Abonement::all();
       $currentAbonements =Abonement_log::where('client_id', $client->id)->where('count', '>', 0)->get();
-      
-      // return $currentAbonements;
 
+      $checks = Check::where('client_id', $client->id)->where('is_closed', true)->get();
+      $total = Check::where('client_id', $client->id)->sum('total')/100;
+      
       $client->age = Carbon::parse($client->birthday)->diffInYears();
-      $client->age < 5 ? $client->age_plural = 'года' : $client->age_plural = 'лет';
-      return view('clients.show', compact('client', 'abonements'));
+      $client->birthday = Carbon::parse($client->birthday)->format('d.m.Y');
+
+
+      if ($client->age == 1)
+        $client->age_plural = 'год';
+      else 
+        $client->age < 5 ? $client->age_plural = 'года' : $client->age_plural = 'лет';
+      // return $checks[0]->check_body;
+      return view('clients.show', compact('client', 'abonements','currentAbonements', 'checks', 'total'));
     }
 
     /**

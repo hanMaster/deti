@@ -10,6 +10,10 @@ class Check extends Model
       return $this->hasMany('App\Models\Check_body');
     }
 
+    public function client(){
+      return $this->belongsTo('App\Models\Client');
+    }
+
     /*
      для расчета клиента нужно выбрать мероприятия,
      которые произошли в клубе с момента его прихода
@@ -47,17 +51,33 @@ class Check extends Model
     }
 
     public function log(){
-      foreach ($this->check_body as $item) {
-        if($item->isGood()){
-          $raw = new GoodsLog();
-          $raw->optype = '-';
-          $raw->good_id = $item->good_id;
-          $raw->doc_id = $item->check_id;
-          $raw->quantity = -$item->quantity;
-          $raw->amount = -$item->amount;
-          $raw->save();
+      $total = 0;
+      try{
+        foreach ($this->check_body as $item) {
+          if($item->isGood()){
+            $raw = new GoodsLog();
+            $raw->optype = '-';
+            $raw->good_id = $item->good_id;
+            $raw->doc_id = $item->check_id;
+            $raw->quantity = -$item->quantity;
+            $raw->amount = -$item->amount;
+            $raw->save();
+            $total += $item->amount;
+          }else{
+            $raw = new ServiceLog();
+            $raw->good_id = $item->good_id;
+            $raw->doc_id = $item->check_id;
+            $raw->quantity = -$item->quantity;
+            $raw->amount = -$item->amount;
+            $raw->save();
+            $total += $item->amount;
+          }
         }
+      }catch(Exception $e){
+        echo 'Выброшено исключение: ',  $e->getMessage(), "\n";
+        return 0;
       }
-      return true;
+      
+      return $total;
     }
 }

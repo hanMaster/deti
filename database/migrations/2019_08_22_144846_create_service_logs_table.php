@@ -3,9 +3,8 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-use Carbon\Carbon;
 
-class CreateChecksTable extends Migration
+class CreateServiceLogsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,12 +13,12 @@ class CreateChecksTable extends Migration
      */
     public function up()
     {
-        Schema::create('checks', function (Blueprint $table) {
+        Schema::create('service_logs', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('client_id');
-            $table->unsignedInteger('user_id');
-            $table->boolean('is_closed')->default(false);
-            $table->unsignedInteger('total')->default(0);
+            $table->unsignedInteger('good_id');
+            $table->unsignedInteger('doc_id');
+            $table->integer('quantity');
+            $table->integer('amount');
             $table->timestamps();
         });
     }
@@ -31,6 +30,6 @@ class CreateChecksTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('checks');
+        Schema::dropIfExists('service_logs');
     }
 }

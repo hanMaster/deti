@@ -44,8 +44,7 @@
                           data-toggle="dropdown"
                           aria-haspopup="true"
                           aria-expanded="false"
-                          >Товары</a
-                        >
+                          >Товары</a>
                         <div class="dropdown-menu" aria-labelledby="dropdown02">
                           <a class="dropdown-item" href="{{ url('/goodsin')}}">Приход</a>
                           <a class="dropdown-item" href="{{ url('/warehouse') }}">Остатки товаров</a>
@@ -53,6 +52,21 @@
                       </li>
 
                       <li class="nav-item"><a class="nav-link" href="/calendar">Календарь мероприятий</a></li>
+                      <li class="nav-item dropdown">
+                        <a
+                          class="nav-link dropdown-toggle"
+                          href="#"
+                          id="dropdown03"
+                          data-toggle="dropdown"
+                          aria-haspopup="true"
+                          aria-expanded="false"
+                          >Отчеты</a>
+                        <div class="dropdown-menu" aria-labelledby="dropdown03">
+                          <a class="dropdown-item" href="{{ url('/sales_report')}}">Продажи</a>
+                          <a class="dropdown-item" href="{{ url('/client_spent')}}">Прибыль с клиента</a>
+                        </div>
+                      </li>
+
                       @endguest
                     </ul>
 

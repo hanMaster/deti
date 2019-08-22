@@ -25,7 +25,6 @@
 
       <hr>
       <input type="submit" value="Продать" class="btn btn-primary">
-      {{-- <a href="/sell" class="btn btn-primary">Продать</a> --}}
       <a href="/" class="btn btn-secondary pull-right">Отмена</a>
       
     </form>

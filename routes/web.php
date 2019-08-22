@@ -39,6 +39,8 @@ Route::post('sell/{check}', 'CheckController@addSell')->middleware('auth');
 
 //Проведение чека
 Route::get('check/{check}', 'CheckController@update')->middleware('auth');
+Route::delete('check/{check}', 'CheckController@destroy')->middleware('auth');
+
 
 Route::get('/calendar', 'CalendarController@index')->middleware('auth');
 
@@ -59,6 +61,13 @@ Route::group(['prefix'=>'abonements', 'middleware'=>'auth'], function(){
   Route::delete('/{abonement}', ['uses'=>'AbonementsController@destroy']);
 });
 
+
+
 Route::get('/dictionaries', function () {
   return view('dictionaries');
 });
+
+// Reports
+
+Route::get('/sales_report', 'ReportController@salesreport')->middleware('auth');
+Route::get('/client_spent', 'ReportController@clientSpentReport')->middleware('auth');

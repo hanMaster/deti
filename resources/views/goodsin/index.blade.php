@@ -39,7 +39,7 @@
     @foreach ($goodsin as $goodin)
       <tr>
         <td>{{$goodin->id}}</td>
-        <td>{{$goodin->name}}</td>
+        <td>{{$goodin->good->name}}</td>
         <td>{{$goodin->quantity}}</td>
         <td>{{$goodin->amount}}</td>
         <td>{{$goodin->created_at}}</td>

@@ -23,6 +23,7 @@
         <h5>Возраст: {{$client->age.' '.$client->age_plural}}</h5>
         <h5>Родитель: {{$client->parent}}</h5>
         <h5>Телефон: {{$client->phone}}</h5>
+        <h3>Потрачено: {{$total}} руб.</h3>
       </div>
       
       <div class="col-md-6">
@@ -50,8 +51,34 @@
 
       {{-- Абонементы --}}
       <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-        <h3 class="mt-5">Нет активных абонементов</h3>
+        
 
+        @if (count($currentAbonements) > 0)  
+          <table class="table table-striped table-bordered mt-2">
+            <thead class="thead-dark">
+              <tr>
+                <th>Дата приобретения</th>
+                <th>Вид абонемента</th>
+                <th>Цена абонемента</th>
+                <th>Остаток занятий</th>
+              </tr>
+            </thead>
+            <tbody>
+            @foreach ($currentAbonements as $currentAbonement)
+              <tr>
+                <td>{{$currentAbonement->created_at->format('d.m.Y')}}</td>
+                <td>{{$currentAbonement->abonement->name}}</td>
+                <td>{{$currentAbonement->abonement->price/100}}</td>
+                <td>{{$currentAbonement->count}}</td>
+              </tr>
+            @endforeach
+            </tbody>
+            <tfoot>
+            </tfoot>
+          </table>
+        @else
+          <h3 class="mt-5">Нет активных абонементов</h3>
+        @endif
 
         <!-- Button trigger modal -->
         <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#abonementAddModal">
@@ -89,50 +116,56 @@
             </div>
           </div>
         </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
       </div>
       {{-- Абонементы --}}
 
-
-
       <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+      @if (count($checks) > 0)
         <table class="table table-striped table-bordered mt-2">
           <thead class="thead-dark">
             <tr>
               <th>Дата</th>
-              <th>Вид занятия</th>
               <th>Сумма</th>
             </tr>
           </thead>
           <tbody>
+          @foreach($checks as $check)
             <tr>
-              <td>01.01.2018</td>
-              <td>Новый год</td>
-              <td>4500</td>
+              <td>{{$check->created_at->format('d.m.Y')}}</td>
+              <td>{{$check->total/100}}</td>
             </tr>
             <tr>
-              <td>01.01.2018</td>
-              <td>Новый год</td>
-              <td>4500</td>
+              <td colspan='2'>
+              <table class="table table-striped table-bordered mt-2">
+                <thead class="thead-dark">
+                  <tr>
+                    <th>Наименование</th>
+                    <th>Кол-во</th>
+                    <th>Цена</th>
+                    <th>Сумма</th>
+                  </tr>
+                </thead>
+                <tbody>
+                @foreach($check->check_body as $body)
+                  <tr>
+                    <td>{{$body->good->name}}</td>
+                    <td>{{$body->quantity}}</td>
+                    <td>{{$body->price/100}}</td>
+                    <td>{{$body->amount/100}}</td>
+                  </tr>
+                @endforeach
+                </tbody>
+              </table>
+              </td>
             </tr>
+          @endforeach
           </tbody>
           <tfoot>
           </tfoot>
         </table>
+        @else
+          <h3 class="mt-5">Клиент еще не посещал клуб</h3>
+        @endif
       </div>
     </div>
   </div>

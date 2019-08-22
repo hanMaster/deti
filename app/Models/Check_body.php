@@ -10,12 +10,11 @@ class Check_body extends Model
     return $this->belongsTo('App\Models\Check');
   }
 
-  public function goodName($id) {
-    return Good::find($id)->name;
-  }
-
   public function isGood(){
     return (Good::find($this->good_id)->type == 'good');
   }
 
+  public function good(){
+    return $this->belongsTo('App\Models\Good');
+  }
 }

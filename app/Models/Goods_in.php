@@ -20,4 +20,7 @@ class Goods_in extends Model
       $raw = GoodsLog::where('doc_id', $this->id)->delete();
     }
   }
+  public function good(){
+    return $this->belongsTo('App\Models\Good');
+  }
 }

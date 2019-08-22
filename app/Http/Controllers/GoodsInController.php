@@ -18,7 +18,7 @@ class GoodsInController extends Controller
      */
     public function index()
     {
-      $goodsin = GoodsInDocs::paginate(10);
+      $goodsin = Goods_in::paginate(10);
       return view('goodsin.index', compact('goodsin'));
     }
 

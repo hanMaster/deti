@@ -7,6 +7,7 @@ use App\Models\Check_body;
 use App\Models\Client;
 use App\Models\Good;
 use App\Models\Warehouse;
+use App\Models\Abonement_log;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Auth;
@@ -79,7 +80,8 @@ class CheckController extends Controller
       $body->price = Good::findOrFail($request->good_id)->price;
       $body->amount = $body->quantity * $body->price;
       $body->save();
-      return redirect('/')->with('success', 'Товар успешно добавлен в чек');
+      // return redirect('/')->with('success', 'Товар успешно добавлен в чек');
+      return back()->with('success', 'Товар успешно добавлен в чек');
     }
 
     public function calculate(Check $check)
@@ -92,8 +94,9 @@ class CheckController extends Controller
       $check->diff = $check->start->diffInMinutes();
       $check->start = $check->start->toTimeString();
       $time_now = Carbon::now()->toTimeString();
+      $services = Good::where('type','service')->get();
      
-      return view('checks.calc', compact('time_now', 'check'));
+      return view('checks.calc', compact('time_now', 'check', 'services'));
     }
 
 
@@ -108,7 +111,13 @@ class CheckController extends Controller
     {
       $check->is_closed = true;
       //Фиксируем движение товара (добавляем транзакциюв лог goods_log)
-      if($check->log()){
+      $total = $check->log();
+
+      // списываем абонемент
+      // Abonement_log::
+
+      if($total > 0){
+        $check->total = $total;
         $check->save();
         return redirect('/')->with('success', 'Чек успешно проведен');
       }
@@ -120,8 +129,10 @@ class CheckController extends Controller
      * @param  \App\Models\Check  $check
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Check $check)
+    public function destroy(Request $request, Check $check)
     {
-        //
+      $row = $check->check_body->find($request->bodyId);
+      $row->delete();
+      return back()->with('success', 'Удаление успешно');
     }
 }
